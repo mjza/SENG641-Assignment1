@@ -1,5 +1,5 @@
 /*
- * @(#)ScribbleTool.java
+ * @(#)StarTool.java
  *
  * Project:		JHotdraw - a GUI framework for technical drawings
  *				http://www.jhotdraw.org
@@ -17,7 +17,7 @@ import org.jhotdraw.util.Undoable;
 import java.awt.event.MouseEvent;
 
 /**
- * Tool to scribble a PolyLineFigure
+ * Tool to star a PolyLineFigure
  *
  * @see PolyLineFigure
  *
@@ -25,7 +25,7 @@ import java.awt.event.MouseEvent;
  */
 public class StarTool extends AbstractTool {
 
-	private PolyLineFigure  fScribble;
+	private PolyLineFigure  fStar;
 	private int             fLastX, fLastY;
 
 	/**
@@ -44,23 +44,23 @@ public class StarTool extends AbstractTool {
 
 	public void deactivate() {
 		super.deactivate();
-		if (fScribble != null) {
-			if (fScribble.size().width < 4 || fScribble.size().height < 4) {
-				getActiveDrawing().remove(fScribble);
+		if (fStar != null) {
+			if (fStar.size().width < 4 || fStar.size().height < 4) {
+				getActiveDrawing().remove(fStar);
 				// nothing to undo
 				setUndoActivity(null);
 			}
-			fScribble = null;
+			fStar = null;
 		}
 	}
 
 	private void point(int x, int y) {
-		if (fScribble == null) {
-			fScribble = new PolyLineFigure(x, y);
-			setAddedFigure(view().add(fScribble));
+		if (fStar == null) {
+			fStar = new PolyLineFigure(x, y);
+			setAddedFigure(view().add(fStar));
 		}
 		else if (fLastX != x || fLastY != y) {
-			fScribble.addPoint(x, y);
+			fStar.addPoint(x, y);
 		}
 
 		fLastX = x;
@@ -78,15 +78,21 @@ public class StarTool extends AbstractTool {
 		}
 		else {
 			// use original event coordinates to avoid
-			// supress that the scribble is constrained to
+			// supress that the star is constrained to
 			// the grid
-			point(e.getX(), e.getY());
-		}
-	}
-
-	public void mouseDrag(MouseEvent e, int x, int y) {
-		if (fScribble != null) {
-			point(e.getX(), e.getY());
+			//point(e.getX(), e.getY());
+			
+			double alpha = (2 * Math.PI) / 10; 
+			double radius = 100;			
+			for(int i = 11; i != 0; i--)
+			{
+			    double r = radius*(i % 2 + 1)/2;
+			    double omega = alpha * i;
+			    point(new Double((r * Math.sin(omega)) + e.getX()).intValue(), new Double((r * Math.cos(omega)) + e.getY()).intValue());
+			}
+			this.deactivate();
+			
+			
 		}
 	}
 
