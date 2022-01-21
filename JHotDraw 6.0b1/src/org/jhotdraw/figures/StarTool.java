@@ -70,18 +70,10 @@ public class StarTool extends AbstractTool {
 	public void mouseDown(MouseEvent e, int x, int y) {
 		super.mouseDown(e,x,y);
 		if (e.getClickCount() >= 2) {
-			// use undo activity from paste command...
 			setUndoActivity(createUndoActivity());
-
-			// put created figure into a figure enumeration
 			getUndoActivity().setAffectedFigures(new SingleFigureEnumerator(getAddedFigure()));
 		}
-		else {
-			// use original event coordinates to avoid
-			// supress that the star is constrained to
-			// the grid
-			//point(e.getX(), e.getY());
-			
+		else {	// Algorithm for passing points		
 			double alpha = (2 * Math.PI) / 10; 
 			double radius = 100;			
 			for(int i = 11; i != 0; i--)
@@ -90,9 +82,7 @@ public class StarTool extends AbstractTool {
 			    double omega = alpha * i;
 			    point(new Double((r * Math.sin(omega)) + e.getX()).intValue(), new Double((r * Math.cos(omega)) + e.getY()).intValue());
 			}
-			this.deactivate();
-			
-			
+			this.deactivate();			
 		}
 	}
 
