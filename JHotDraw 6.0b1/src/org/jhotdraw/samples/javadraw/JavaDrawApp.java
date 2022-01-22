@@ -150,6 +150,12 @@ public  class JavaDrawApp extends MDI_DrawApplication {
 		
 		tool = new UndoableTool(new StarTool(this));
 		palette.add(createToolButton(IMAGES + "STAR", "Star Figure Tool", tool));
+		
+		tool = new UndoableTool(new StepBackwardsTool(this));
+		palette.add(createToolButton(IMAGES + "BACKWARD", "Step Backwards Tool", tool));
+		
+		tool = new UndoableTool(new StepForwardsTool(this));
+		palette.add(createToolButton(IMAGES + "FORWARD", "Step Forwards Tool", tool));
 	}
 
 	protected Tool createSelectionTool() {
@@ -161,6 +167,14 @@ public  class JavaDrawApp extends MDI_DrawApplication {
 		addMenuIfPossible(mb, createAnimationMenu());
 		addMenuIfPossible(mb, createImagesMenu());
 		addMenuIfPossible(mb, createWindowMenu());
+		addMenuIfPossible(mb, createMovementMenu());
+	}
+	
+	protected JMenu createMovementMenu() {
+		CommandMenu menu = new CommandMenu("Movement");
+		menu.add(new UndoableCommand(new StepBackwardsCommand("Step Backwards", this)));
+		menu.add(new UndoableCommand(new StepForwardsCommand("Step Forwards", this)));		
+		return menu;
 	}
 
 	protected JMenu createAnimationMenu() {
